@@ -1,0 +1,30 @@
+name: landcover-mapping
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  - python=3.6  # earthengine doesn't play with python 3.7
+  - earthengine-api
+  - mypy
+  - black
+  - pytest
+  - pytest-flake8
+  - pandas
+  - xarray
+  - netcdf4
+  - rasterio
+  - jupyter
+  - matplotlib
+  - pip
+  - pytorch
+  - pyproj
+  - tqdm
+  - geopandas
+  - cartopy
+  - scikit-learn
+  - pip:
+      - pytorch-lightning==0.7.1  # lots of API breaking changes
+      - google-api-python-client  # google drive
+      - google-auth-httplib2  # google drive
+      - google-auth-oauthlib  # google drive
+      - gdown  # google drive
