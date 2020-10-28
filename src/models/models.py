@@ -295,17 +295,8 @@ class LandCoverMapper(pl.LightningModule):
         if len(all_preds.shape) == 1:
             all_preds = np.expand_dims(all_preds, axis=-1)
 
-        if self.idx_to_output_class is not None:
-            feature_labels: Optional[List[str]] = []
-            for idx in range(len(self.idx_to_output_class)):
-                cast(List, feature_labels).append(self.idx_to_output_class[idx])
-        else:
-            feature_labels = None
         return preds_to_xr(
-            all_preds,
-            lats=input_data.lat,
-            lons=input_data.lon,
-            feature_labels=feature_labels,
+            all_preds, lats=input_data.lat, lons=input_data.lon, feature_labels=None
         )
 
     def get_interpretable_metrics(self, outputs, prefix: str) -> Dict:
