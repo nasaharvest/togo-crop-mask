@@ -4,13 +4,15 @@ A pixel-wise land type classifier, used to generate a crop mask for Togo
 
 ## Introduction
 
-This repository contains code and data to generate a crop mask for Togo. 
+This repository contains code and data to generate a crop mask for Togo.
 It was used to deliver a high-resolution (10m) cropland mask in 10 days to help the government distribute aid to smallholder farmers during the COVID-19 pandemic.
 
 <img src="diagrams/results.jpg" alt="model results" height="400px"/>
 
 It combines a hand-labelled dataset of crop / non-crop images with a [global database of crowdsourced cropland data](https://doi.pangaea.de/10.1594/PANGAEA.873912)
 to train a multi-headed LSTM-based model to predict the presence of cropland in a pixel.
+
+The map can be found on [Google Earth Engine](https://code.earthengine.google.com/5d8ff282e63c26610b7cd3b4a989929c).
 
 ## Pipeline
 
@@ -33,7 +35,7 @@ with an environment, install Anaconda from the link above, and (from this direct
 ```bash
 conda env create -f environment.yml
 ```
-This will create an environment named `landcover-mapping` with all the necessary packages to run the code. To 
+This will create an environment named `landcover-mapping` with all the necessary packages to run the code. To
 activate this environment, run
 
 ```bash
@@ -60,7 +62,7 @@ Running exports can be viewed (and individually cancelled) in the `Tabs` bar on 
 For additional support the [Google Earth Engine forum](https://groups.google.com/forum/#!forum/google-earth-engine-developers) is super
 helpful.
 
-Exports from Google Drive should be saved in [`data/raw`](data/raw). 
+Exports from Google Drive should be saved in [`data/raw`](data/raw).
 This happens by default if the [GDrive](src/exporters/gdrive.py) exporter is used.
 
 #### Tests
