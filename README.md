@@ -7,7 +7,7 @@ A pixel-wise land type classifier, used to generate a crop mask for Togo
 This repository contains code and data to generate a crop mask for Togo.
 It was used to deliver a high-resolution (10m) cropland mask in 10 days to help the government distribute aid to smallholder farmers during the COVID-19 pandemic.
 
-<img src="diagrams/results.jpg" alt="model results" height="400px"/>
+<img src="diagrams/togo_map.jpg" alt="Togo map" height="400px"/>
 
 It combines a hand-labelled dataset of crop / non-crop images with a [global database of crowdsourced cropland data](https://doi.pangaea.de/10.1594/PANGAEA.873912)
 to train a multi-headed LSTM-based model to predict the presence of cropland in a pixel.
@@ -22,10 +22,40 @@ The main entrypoints into the pipeline are the [scripts](scripts). Specifically:
 * [scripts/process.py](scripts/process.py) processes the raw data
 * [scripts/engineer.py](scripts/engineer.py) combines the earth observation data with the labels to create (x, y) training data
 * [scripts/models.py](scripts/models.py) trains the models
-* [scripts/predict.py](scripts/predict.py) takes a trained model and runs it on an area, generating plots like the one above
+* [scripts/predict.py](scripts/predict.py) takes a trained model and runs it on exported tif files (the path to these files is defined in the script)
 
 The [split_tiff.py](scripts/split_tiff.py) script is useful to break large exports from Google Earth Engine, which may
 be too large to fit into memory.
+
+Once the pipeline has been run, the directory structure of the [data](data) folder should look like the following. If you get errors, a good first check would be to see if any files are missing.
+
+```
+data
+│   README.md
+│
+└───raw // raw exports
+│   └───togo  // this is included in this repo
+│   └───geowiki_landcover_2017  // exported by scripts.export.export_geowiki()
+│   └───earth_engine_togo  // exported to Google Drive by scripts.export.export_togo(), and must be copied here
+│   │                      // scripts.export.export_togo() expects processed/togo{_evaluation} to exist
+│   └───earth_engine_togo_evaluation  // exported to Google Drive by scripts.export.export_togo(), and must be copied here
+│   │                                 // scripts.export.export_togo() expects processed/togo{_evaluation} to exist
+│   └───earth_engine_geowiki  // exported to Google Drive by scripts.export.export_geowiki_sentinel_ee(), and must be copied here
+│                             // scripts.export.export_geowiki_sentinel_ee() expects processed/geowiki_landcover_2017 to exist
+│
+└──processed  // raw data processed for clarity
+│   └───geowiki_landcover_2017 // created by scripts.process.process_geowiki()
+│   │                          // which expects raw/geowiki_landcover_2017 to exist
+│   └───togo  // created by scripts.process.process_togo()
+│   └───togo_evaluation  // created by scripts.process.process_togo()
+│
+└──features  // the arrays which will be ingested by the model
+│   └───geowiki_landcover_2017 // created by scripts.engineer.engineer_geowiki()
+│   └───togo  // created by scripts.engineer.engineer_togo()
+│   └───togo_evaluation  // created by scripts.engineer.engineer_togo()
+│
+└──lightning_logs // created by pytorch_lightning when training models
+```
 
 ## Setup
 
@@ -79,6 +109,6 @@ mypy src  # type checking
 
 If you find this code useful, please cite the following paper:
 
-Hannah Kerner, Gabriel Tseng, Inbal Becker-Reshef, Catherine Nakalembe, Brian Barker, Blake Munshell, Madhava Paliyam, and Mehdi Hosseini. 2020. Rapid Response Crop Maps in Data Sparse Regions. In review for KDD ’20: ACMSIGKDD Conference on Knowledge Discovery and Data Mining Workshops, August 22–27, 2020, San Diego, CA.
+Hannah Kerner, Gabriel Tseng, Inbal Becker-Reshef, Catherine Nakalembe, Brian Barker, Blake Munshell, Madhava Paliyam, and Mehdi Hosseini. 2020. Rapid Response Crop Maps in Data Sparse Regions. KDD ’20: ACMSIGKDD Conference on Knowledge Discovery and Data Mining Workshops, August 22–27, 2020, San Diego, CA.
 
 The hand-labeled training and test data used in the above paper can be found at: https://doi.org/10.5281/zenodo.3836629
